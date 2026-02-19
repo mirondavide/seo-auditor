@@ -62,6 +62,13 @@ export default function LandingPage() {
               Free forever. No credit card required.
             </p>
           </div>
+          <p className="mt-4 text-sm text-gray-500">
+            Or{" "}
+            <Link href="/audit" className="font-medium text-blue-600 hover:text-blue-700 underline">
+              try a free instant audit
+            </Link>
+            {" "}&mdash; no sign-up needed
+          </p>
         </div>
       </section>
 
@@ -140,7 +147,7 @@ export default function LandingPage() {
             Start free, upgrade when you need more power.
           </p>
 
-          <div className="mx-auto mt-12 grid max-w-4xl gap-8 lg:grid-cols-2">
+          <div className="mx-auto mt-12 grid max-w-5xl gap-8 lg:grid-cols-3">
             {/* Free */}
             <div className="rounded-xl border p-8">
               <h3 className="text-xl font-bold">Free</h3>
@@ -181,7 +188,7 @@ export default function LandingPage() {
               </div>
               <h3 className="text-xl font-bold">Pro</h3>
               <div className="mt-4 text-4xl font-bold">
-                7 EUR
+                19 EUR
                 <span className="text-base font-normal text-gray-500">
                   /month
                 </span>
@@ -197,7 +204,6 @@ export default function LandingPage() {
                   "PDF reports",
                   "Monthly email alerts",
                   "Regression detection",
-                  "Priority support",
                 ].map((f) => (
                   <li key={f} className="flex items-center gap-2 text-sm">
                     <Check className="h-4 w-4 text-green-500" />
@@ -208,6 +214,41 @@ export default function LandingPage() {
               <Link
                 href="/register"
                 className="mt-8 block rounded-lg bg-blue-600 px-6 py-3 text-center text-sm font-medium text-white hover:bg-blue-700"
+              >
+                Start Free, Upgrade Later
+              </Link>
+            </div>
+
+            {/* Agency */}
+            <div className="rounded-xl border-2 border-purple-600 p-8">
+              <h3 className="text-xl font-bold">Agency</h3>
+              <div className="mt-4 text-4xl font-bold">
+                49 EUR
+                <span className="text-base font-normal text-gray-500">
+                  /month
+                </span>
+              </div>
+              <p className="mt-2 text-sm text-gray-600">
+                For agencies managing multiple clients
+              </p>
+              <ul className="mt-6 space-y-3">
+                {[
+                  "20 websites",
+                  "Unlimited audits",
+                  "White-label PDF reports",
+                  "Monthly email alerts",
+                  "Regression detection",
+                  "Priority support",
+                ].map((f) => (
+                  <li key={f} className="flex items-center gap-2 text-sm">
+                    <Check className="h-4 w-4 text-green-500" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/register"
+                className="mt-8 block rounded-lg bg-purple-600 px-6 py-3 text-center text-sm font-medium text-white hover:bg-purple-700"
               >
                 Start Free, Upgrade Later
               </Link>

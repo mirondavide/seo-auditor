@@ -22,6 +22,7 @@ export const users = pgTable("users", {
   emailVerified: timestamp("email_verified", { mode: "date" }),
   image: text("image"),
   passwordHash: text("password_hash"),
+  brandLogoUrl: text("brand_logo_url"),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "date" }).defaultNow().notNull(),
 });
@@ -322,6 +323,7 @@ export const subscriptions = pgTable(
       .references(() => users.id, { onDelete: "cascade" }),
     stripeCustomerId: text("stripe_customer_id").notNull(),
     stripeSubscriptionId: text("stripe_subscription_id").unique(),
+    planTier: text("plan_tier").$type<"pro" | "agency">().notNull().default("pro"),
     status: text("status")
       .$type<
         "active" | "canceled" | "past_due" | "trialing" | "unpaid" | "incomplete"

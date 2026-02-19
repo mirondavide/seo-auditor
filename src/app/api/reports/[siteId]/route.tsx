@@ -6,6 +6,7 @@ import {
   sites,
   reports,
   metricsSnapshots,
+  users,
 } from "@/lib/db/schema";
 import { eq, and, desc } from "drizzle-orm";
 import { renderToBuffer } from "@react-pdf/renderer";
@@ -29,7 +30,7 @@ export async function POST(
   const limits = await getUserPlanLimits(session.user.id);
   if (!limits.pdfReports) {
     return NextResponse.json(
-      { error: "PDF reports require a Pro subscription" },
+      { error: "PDF reports require a Pro or Agency subscription." },
       { status: 403 }
     );
   }
@@ -79,6 +80,16 @@ export async function POST(
 
   const reportMonth = new Date().toISOString().slice(0, 7);
 
+  // Check white-label eligibility
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, session.user.id),
+    columns: { brandLogoUrl: true },
+  });
+  const whiteLabel =
+    limits.whiteLabelPdf && user?.brandLogoUrl
+      ? { logoUrl: user.brandLogoUrl }
+      : undefined;
+
   // Generate PDF
   const pdfBuffer = await renderToBuffer(
     <AuditReport
@@ -100,6 +111,7 @@ export async function POST(
       issues={(audit.issues as AuditIssue[]) ?? []}
       recommendations={(audit.recommendations as AuditRecommendation[]) ?? []}
       checklist={(audit.checklist as ChecklistItem[]) ?? []}
+      whiteLabel={whiteLabel}
     />
   );
 

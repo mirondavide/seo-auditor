@@ -76,13 +76,13 @@ export function Sidebar({ open, onClose }: SidebarProps) {
 
       <div className="border-t p-4">
         <div className="rounded-lg bg-blue-50 p-4">
-          <p className="text-sm font-medium text-blue-800">Upgrade to Pro</p>
+          <p className="text-sm font-medium text-blue-800">Upgrade your plan</p>
           <p className="mt-1 text-xs text-blue-600">
             Unlimited audits, PDF reports & email alerts
           </p>
           <Link href="/billing">
             <Button size="sm" className="mt-3 w-full">
-              7 EUR/month
+              From 19 EUR/month
             </Button>
           </Link>
         </div>

@@ -1,7 +1,7 @@
 export type SubscriptionStatus = "active" | "canceled" | "past_due" | "trialing" | "unpaid";
 export type AuditStatus = "pending" | "running" | "completed" | "failed";
 export type AlertType = "regression" | "improvement" | "warning";
-export type PlanTier = "free" | "pro";
+export type PlanTier = "free" | "pro" | "agency";
 
 export interface MetricsData {
   sessions: number;
@@ -64,6 +64,7 @@ export interface PlanLimits {
   maxAuditsPerMonth: number;
   pdfReports: boolean;
   emailAlerts: boolean;
+  whiteLabelPdf: boolean;
 }
 
 export const PLAN_LIMITS: Record<PlanTier, PlanLimits> = {
@@ -72,11 +73,20 @@ export const PLAN_LIMITS: Record<PlanTier, PlanLimits> = {
     maxAuditsPerMonth: 3,
     pdfReports: false,
     emailAlerts: false,
+    whiteLabelPdf: false,
   },
   pro: {
     maxSites: 5,
     maxAuditsPerMonth: -1, // unlimited
     pdfReports: true,
     emailAlerts: true,
+    whiteLabelPdf: false,
+  },
+  agency: {
+    maxSites: 20,
+    maxAuditsPerMonth: -1, // unlimited
+    pdfReports: true,
+    emailAlerts: true,
+    whiteLabelPdf: true,
   },
 };

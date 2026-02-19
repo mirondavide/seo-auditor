@@ -5,12 +5,13 @@ export default auth((req) => {
   const { pathname } = req.nextUrl;
 
   // Public routes that don't need auth
-  const publicPaths = ["/", "/login", "/register", "/forgot-password"];
+  const publicPaths = ["/", "/login", "/register", "/forgot-password", "/audit"];
   const isPublic =
     publicPaths.includes(pathname) ||
     pathname.startsWith("/api/auth") ||
     pathname.startsWith("/api/webhooks") ||
-    pathname.startsWith("/api/cron");
+    pathname.startsWith("/api/cron") ||
+    pathname === "/api/audit/public";
 
   if (isPublic) return NextResponse.next();
 

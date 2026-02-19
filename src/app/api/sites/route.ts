@@ -53,7 +53,7 @@ export async function POST(request: Request) {
 
   if (siteCount.count >= limits.maxSites) {
     return NextResponse.json(
-      { error: `Site limit reached (${limits.maxSites}). Upgrade to add more sites.` },
+      { error: `Site limit reached (${limits.maxSites}). Upgrade to Pro or Agency to add more sites.` },
       { status: 403 }
     );
   }

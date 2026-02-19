@@ -13,7 +13,7 @@ export async function getUserPlan(userId: string): Promise<PlanTier> {
     subscription &&
     (subscription.status === "active" || subscription.status === "trialing")
   ) {
-    return "pro";
+    return subscription.planTier;
   }
 
   return "free";

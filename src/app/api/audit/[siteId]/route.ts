@@ -42,7 +42,7 @@ export async function POST(
 
     if (auditCount.count >= limits.maxAuditsPerMonth) {
       return NextResponse.json(
-        { error: "Monthly audit limit reached. Upgrade to Pro for unlimited audits." },
+        { error: "Monthly audit limit reached. Upgrade to Pro or Agency for unlimited audits." },
         { status: 403 }
       );
     }
