@@ -5,11 +5,19 @@ import { ReportReadyEmail } from "./templates/report-ready";
 import type { Regression } from "@/lib/analysis/regression-detector";
 import { createElement } from "react";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let _resend: Resend | null = null;
+
+function getResend() {
+  if (!_resend) {
+    _resend = new Resend(process.env.RESEND_API_KEY);
+  }
+  return _resend;
+}
+
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "noreply@seoauditor.com";
 
 export async function sendWelcomeEmail(to: string, name: string) {
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM_EMAIL,
     to,
     subject: "Welcome to SEO Auditor",
@@ -24,7 +32,7 @@ export async function sendMonthlyAlert(
   siteId: string,
   regressions: Regression[]
 ) {
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM_EMAIL,
     to,
     subject: `SEO Alert: Changes detected for ${siteName}`,
@@ -44,7 +52,7 @@ export async function sendReportReadyEmail(
   overallScore: number,
   downloadUrl: string
 ) {
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM_EMAIL,
     to,
     subject: `Your SEO Report for ${siteName} is Ready`,

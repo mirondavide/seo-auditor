@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { stripe } from "@/lib/stripe";
+import { getStripe, tierFromPriceId } from "@/lib/stripe";
 import { db } from "@/lib/db";
 import { subscriptions } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
   let event: Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(
+    event = getStripe().webhooks.constructEvent(
       body,
       signature,
       process.env.STRIPE_WEBHOOK_SECRET!
@@ -34,11 +34,13 @@ export async function POST(request: Request) {
 
       const subscriptionId = session.subscription as string;
       const customerId = session.customer as string;
+      const tier = (session.metadata?.tier as "pro" | "agency") || "pro";
 
       await db.insert(subscriptions).values({
         userId,
         stripeCustomerId: customerId,
         stripeSubscriptionId: subscriptionId,
+        planTier: tier,
         status: "active",
         currentPeriodStart: new Date(),
         currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
@@ -51,10 +53,16 @@ export async function POST(request: Request) {
       const subId = subscription.id;
       const subData = subscription as unknown as Record<string, unknown>;
 
+      // Detect tier from the current price
+      const items = subData.items as { data?: { price?: { id?: string } }[] } | undefined;
+      const priceId = items?.data?.[0]?.price?.id;
+      const detectedTier = priceId ? tierFromPriceId(priceId) : null;
+
       await db
         .update(subscriptions)
         .set({
           status: subscription.status as "active" | "canceled" | "past_due" | "trialing" | "unpaid" | "incomplete",
+          ...(detectedTier && { planTier: detectedTier }),
           currentPeriodStart: typeof subData.current_period_start === "number"
             ? new Date(subData.current_period_start * 1000)
             : new Date(),
